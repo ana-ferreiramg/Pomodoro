@@ -1,5 +1,6 @@
 <h1 align="center">Pomodoro</h1>
 <p>Projeto baseado no desafio do <a href="https://www.devchallenge.com.br/" target="_blank">DevChallenge</a>.</p>
+<a href="https://ana-ferreiramg.github.io/Pomodoro/">Usar Pomodoro</a>
 <div align="center">
   <h2>Versão Web</h2>
   <img width="900px" src="imgs_readme/pomodoro_page_initial.png" alt="Página inicial">
