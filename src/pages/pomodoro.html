@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
+    <title>Pomodoro</title>
+
+    <link rel="shortcut icon" href="../../favicon.ico" type="image/x-icon" />
+
+    <!-- GOOGLE FONTS -->
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet" />
+
+    <!-- FONT AWESOME ICONS -->
+    <script src="https://kit.fontawesome.com/552519881f.js" crossorigin="anonymous"></script>
+
+    <!-- CSS STYLES -->
+    <link rel="stylesheet" href="../css/global.css" />
+    <link rel="stylesheet" href="../css/pomodoro.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>Pomodoro</h1>
+        <a href="../../index.html" class="btn" onclick="App.pause()">Início</a>
+      </header>
+      <main>
+        <div id="time_work" class="pomodoro">
+          <div class="time">
+            <div class="time_animation">
+              <label class="sr-only" for="pomodoro_time_work">Trabalho</label>
+              <input id="pomodoro_time_work" type="text" value="" disabled />
+            </div>
+          </div>
+
+          <div class="play-pause-pomodoro">
+            <h2>Trabalho</h2>
+            <div class="points">
+              <div id="sessions-work"></div>
+            </div>
+            <button id="btn-work" class="play btn btn-work" title="" onclick="DOM.playPauseIcon(this)"></button>
+          </div>
+        </div>
+
+        <div id="time_break" class="pomodoro hide">
+          <div class="time">
+            <div class="time_animation">
+              <label class="sr-only" for="pomodoro_time_break">Pausa</label>
+              <input id="pomodoro_time_break" type="text" value="" disabled />
+            </div>
+          </div>
+
+          <div class="play-pause-pomodoro">
+            <h2>Pausa</h2>
+            <div class="points">
+              <div id="sessions-break"></div>
+            </div>
+            <button id="btn-break" class="play btn btn-break" title="" onclick="DOM.playPauseIcon(this)"></button>
+          </div>
+        </div>
+      </main>
+      <div class="modal-overlay">
+        <div class="modal">
+          <div class="modal-header">
+            <img src="../img/done.svg" class="icon" alt="It's done!" />
+          </div>
+          <div class="modal-body">
+            <h2>As sessões já terminaram!</h2>
+            <p>Volte para o início e comece um novo ciclo!</p>
+            <button class="btn" onclick="DOM.modalSessionsDone()">Ok</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <audio>
+      <source src="../sounds/ShipBell.mp3" type="audio/mpeg" />
+      <source src="../sounds/ShipBell.ogg" type="audio/ogg" />
+      <source src="../sounds/ShipBell.wav" type="audio/wav" />
+    </audio>
+    <script src="../js/pomodoro.js"></script>
+  </body>
+</html>
