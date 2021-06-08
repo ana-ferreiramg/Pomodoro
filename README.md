@@ -3,17 +3,17 @@
 <a href="https://ana-ferreiramg.github.io/Pomodoro/">Usar Pomodoro</a>
 <div align="center">
   <h2>Versão Web</h2>
-  <img width="900px" src="imgs_readme/pomodoro_page_initial.png" alt="Página inicial">
-  <img width="900px" src="imgs_readme/pomodoro_page_pomodoro1.png" alt="Pomodoro Timer Work">
-  <img width="900px" src="imgs_readme/pomodoro_page_pomodoro2.png" alt="Pomodoro Timer Break">
-  <img width="900px" src="imgs_readme/pomodoro.gif" alt="Pomodoro Done Modal">
+  <img width="900px" src=".github/pomodoro_page_initial.png" alt="Página inicial">
+  <img width="900px" src=".github/pomodoro_page_pomodoro1.png" alt="Pomodoro Timer Work">
+  <img width="900px" src=".github/pomodoro_page_pomodoro2.png" alt="Pomodoro Timer Break">
+  <img width="900px" src=".github/pomodoro.gif" alt="Pomodoro Done Modal">
 </div>
 <div align="center">
   <h2>Versão Mobile</h2>
-  <img width="300px" height="500px" src="imgs_readme/mobile_pomodoro_page_initial.png" alt="Página inicial">
-  <img width="300px" height="500px" src="imgs_readme/mobile_pomodoro_page_pomodoro1.png" alt="Pomodoro Timer Work">
-  <img width="300px" height="500px" src="imgs_readme/mobile_pomodoro_page_pomodoro2.png" alt="Pomodoro Timer Break">
-  <img src="imgs_readme/pomodoro_mobile.gif" alt="Pomodoro Done Modal">
+  <img width="300px" height="500px" src=".github/mobile_pomodoro_page_initial.png" alt="Página inicial">
+  <img width="300px" height="500px" src=".github/mobile_pomodoro_page_pomodoro1.png" alt="Pomodoro Timer Work">
+  <img width="300px" height="500px" src=".github/mobile_pomodoro_page_pomodoro2.png" alt="Pomodoro Timer Break">
+  <img src=".github/pomodoro_mobile.gif" alt="Pomodoro Done Modal">
 </div>
 <h2>🚀 Tecnologias</h2>
 <ul>
