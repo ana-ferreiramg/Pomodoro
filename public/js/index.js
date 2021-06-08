@@ -9,67 +9,73 @@ btnContinue.addEventListener('click', () => {
 });
 
 const setTime = {
-  add(el) {
-    return (el += 1);
+  add(value) {
+    return (value += 1);
   },
 
-  sub(el) {
-    return (el -= 1);
+  sub(value) {
+    return (value -= 1);
   },
 };
 
-const PomodoroTime = {
-  btnsAdd: document.querySelectorAll('.btn-add'),
-  btnsSub: document.querySelectorAll('.btn-sub'),
-  inputWorkTime: document.getElementById('working_time'),
-  inputBreakTime: document.getElementById('breaking_time'),
-  inputNumberSessions: document.getElementById('number_sessions'),
+class PomodoroSetTime {
+  constructor() {
+    this.inputWorkTime = document.getElementById('working_time');
+    this.inputBreakTime = document.getElementById('breaking_time');
+    this.inputNumberSessions = document.getElementById('number_sessions');
+
+    this.add();
+    this.sub();
+  }
 
   add() {
-    PomodoroTime.btnsAdd[0].addEventListener('click', () => {
-      let workTime = Number(PomodoroTime.inputWorkTime.value);
+    const btnsAdd = document.querySelectorAll('.btn-add');
 
-      return (PomodoroTime.inputWorkTime.value = setTime.add(workTime));
+    btnsAdd.forEach((btn, index) => {
+      btn.addEventListener('click', () => {
+        if (index === 0) {
+          let { workTime } = this.getTimes();
+          return (this.inputWorkTime.value = setTime.add(workTime));
+        }
+        if (index === 1) {
+          let { breakTime } = this.getTimes();
+          return (this.inputBreakTime.value = setTime.add(breakTime));
+        }
+        if (index === 2) {
+          let { sessions } = this.getTimes();
+          return (this.inputNumberSessions.value = setTime.add(sessions));
+        }
+      });
     });
-
-    PomodoroTime.btnsAdd[1].addEventListener('click', () => {
-      let breakTime = Number(PomodoroTime.inputBreakTime.value);
-
-      return (PomodoroTime.inputBreakTime.value = setTime.add(breakTime));
-    });
-
-    PomodoroTime.btnsAdd[2].addEventListener('click', () => {
-      let sessions = Number(PomodoroTime.inputNumberSessions.value);
-
-      return (PomodoroTime.inputNumberSessions.value = setTime.add(sessions));
-    });
-  },
+  }
 
   sub() {
-    PomodoroTime.btnsSub[0].addEventListener('click', () => {
-      let workTime = Number(PomodoroTime.inputWorkTime.value);
+    const btnsSub = document.querySelectorAll('.btn-sub');
 
-      if (workTime > 25) {
-        return (PomodoroTime.inputWorkTime.value = setTime.sub(workTime));
-      }
+    btnsSub.forEach((btn, index) => {
+      btn.addEventListener('click', () => {
+        if (index === 0) {
+          let { workTime } = this.getTimes();
+          return workTime > 25 ? (this.inputWorkTime.value = setTime.sub(workTime)) : 0;
+        }
+        if (index === 1) {
+          let { breakTime } = this.getTimes();
+          return breakTime > 5 ? (this.inputBreakTime.value = setTime.sub(breakTime)) : 0;
+        }
+        if (index === 2) {
+          let { sessions } = this.getTimes();
+          return sessions > 1 ? (this.inputNumberSessions.value = setTime.sub(sessions)) : 0;
+        }
+      });
     });
+  }
 
-    PomodoroTime.btnsSub[1].addEventListener('click', () => {
-      let breakTime = Number(PomodoroTime.inputBreakTime.value);
+  getTimes() {
+    let workTime = Number(this.inputWorkTime.value);
+    let breakTime = Number(this.inputBreakTime.value);
+    let sessions = Number(this.inputNumberSessions.value);
 
-      if (breakTime > 5) {
-        return (PomodoroTime.inputBreakTime.value = setTime.sub(breakTime));
-      }
-    });
-
-    PomodoroTime.btnsSub[2].addEventListener('click', () => {
-      let sessions = Number(PomodoroTime.inputNumberSessions.value);
-
-      if (sessions > 1) {
-        return (PomodoroTime.inputNumberSessions.value = setTime.sub(sessions));
-      }
-    });
-  },
-};
-PomodoroTime.add();
-PomodoroTime.sub();
+    return { workTime, breakTime, sessions };
+  }
+}
+const pomodoro = new PomodoroSetTime();
