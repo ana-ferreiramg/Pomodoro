@@ -1,3 +1,55 @@
+class Pomodoro {
+  constructor() {
+    const { workTime, breakTime } = Utils.getValues();
+    this.workTime = workTime;
+    this.breakTime = breakTime;
+    this.secondsWork = 0;
+    this.secondsBreak = 0;
+    this.startWorkMinutes = 0;
+    this.startBreakMinutes = 0;
+  }
+
+  startWork() {
+    this.startWorkMinutes = setInterval(() => {
+      if (this.secondsWork === 0) {
+        this.secondsWork = 60;
+        this.workTime -= 1;
+      }
+
+      this.secondsWork -= 1;
+      App.show('work', this.workTime, this.secondsWork);
+
+      if (this.secondsWork === 0 && this.workTime === 0) {
+        DOM.sounds();
+        DOM.playPauseIcon(DOM.btnWork);
+        DOM.doneSessions('work');
+        DOM.pomodoroHide();
+        App.reset('work');
+      }
+    }, 1000);
+  }
+
+  startBreak() {
+    this.startBreakMinutes = setInterval(() => {
+      if (this.secondsBreak === 0) {
+        this.secondsBreak = 60;
+        this.breakTime -= 1;
+      }
+
+      this.secondsBreak -= 1;
+      App.show('break', this.breakTime, this.secondsBreak);
+
+      if (this.secondsBreak === 0 && this.breakTime === 0) {
+        DOM.sounds();
+        DOM.playPauseIcon(DOM.btnBreak);
+        DOM.doneSessions('break');
+        DOM.pomodoroHide();
+        App.reset('break');
+      }
+    }, 1000);
+  }
+}
+
 const Utils = {
   url: new URL(document.location).searchParams,
 
@@ -15,25 +67,21 @@ const Utils = {
 };
 
 const DOM = {
-  sessionWork: document.getElementById('sessions-work'),
-  sessionBreak: document.getElementById('sessions-break'),
-  sessionsSpanWork: document.querySelector('#sessions-work'),
-  sessionsSpanBreak: document.querySelector('#sessions-break'),
-  pomodoroWork: document.getElementById('time_work'),
-  pomodoroBreak: document.getElementById('time_break'),
   btnWork: document.getElementById('btn-work'),
   btnBreak: document.getElementById('btn-break'),
 
   createSessions() {
+    const sessionWork = document.getElementById('sessions-work');
+    const sessionBreak = document.getElementById('sessions-break');
     let { numberSessions } = Utils.getValues();
 
     for (let i = 0; i < numberSessions; i++) {
-      let spanWork = document.createElement('span');
-      let spanBreak = document.createElement('span');
+      const spanWork = document.createElement('span');
+      const spanBreak = document.createElement('span');
       spanWork.innerHTML = `.`;
       spanBreak.innerHTML = `.`;
-      DOM.sessionWork.appendChild(spanWork);
-      DOM.sessionBreak.appendChild(spanBreak);
+      sessionWork.appendChild(spanWork);
+      sessionBreak.appendChild(spanBreak);
     }
   },
 
@@ -41,80 +89,77 @@ const DOM = {
     const spansWork = document.querySelectorAll('#sessions-work span');
     const spansBreak = document.querySelectorAll('#sessions-break span');
 
-    for (let tagSpan of spansWork) {
-      tagSpan.classList.add('work');
+    for (let span of spansWork) {
+      span.classList.add('work');
     }
 
-    for (let tagSpan of spansBreak) {
-      tagSpan.classList.add('break');
+    for (let span of spansBreak) {
+      span.classList.add('break');
     }
   },
 
   doneSessions(session) {
     const spansWork = document.querySelectorAll('#sessions-work span');
     const spansBreak = document.querySelectorAll('#sessions-break span');
+    let sessions;
 
-    if (session === 'work') {
-      for (let session of spansWork) {
-        if (!session.classList.contains('done')) {
-          session.classList.add('done');
-          break;
-        }
-      }
-    }
-    if (session === 'break') {
-      for (let session of spansBreak) {
-        if (!session.classList.contains('done')) {
-          session.classList.add('done');
-          break;
-        }
+    if (session === 'work') sessions = spansWork;
+    if (session === 'break') sessions = spansBreak;
+
+    for (let session of sessions) {
+      if (!session.classList.contains('done')) {
+        session.classList.add('done');
+        break;
       }
     }
   },
 
-  pomodoroHide(pomodoro) {
-    if (pomodoro === 'work') {
-      DOM.pomodoroWork.classList.add('hide');
-      DOM.pomodoroBreak.classList.remove('hide');
-    }
-    if (pomodoro === 'break') {
-      DOM.pomodoroBreak.classList.add('hide');
-      DOM.pomodoroWork.classList.remove('hide');
-    }
+  pomodoroHide() {
+    const pomodoroWork = document.getElementById('time_work');
+    const pomodoroBreak = document.getElementById('time_break');
+    pomodoroWork.classList.toggle('hide');
+    pomodoroBreak.classList.toggle('hide');
   },
 
   playPauseIcon(e) {
     const spansBreak = document.querySelectorAll('#sessions-break span');
     const index = spansBreak.length - 1;
 
-    if (spansBreak[index].classList.contains('done')) {
-      DOM.modalSessionsDone();
-    } else {
-      if (e.classList.contains('play')) {
-        e.classList.remove('play');
-        e.classList.add('pause');
-        e.innerHTML = `<i class="fas fa-pause"></i>`;
+    if (spansBreak[index].classList.contains('done')) return DOM.modalSessionsDone();
+    if (e.classList.contains('play')) {
+      e.classList.remove('play');
+      e.classList.add('pause');
+      e.innerHTML = `<i class="fas fa-pause"></i>`;
 
-        if (e.classList.contains('btn-work')) {
-          App.init('work');
-          DOM.btnWork.title = 'Pause';
-        } else if (e.classList.contains('btn-break')) {
-          App.init('break');
-          DOM.btnBreak.title = 'Pause';
-        }
-      } else if (e.classList.contains('pause')) {
-        e.classList.remove('pause');
-        e.classList.add('play');
-        e.innerHTML = `<i class="fas fa-play"></i>`;
-
-        if (e.classList.contains('btn-work')) {
-          App.pause('work');
-          DOM.btnWork.title = 'Play';
-        } else if (e.classList.contains('btn-break')) {
-          App.pause('break');
-          DOM.btnBreak.title = 'Play';
-        }
+      if (e.classList.contains('btn-work')) {
+        App.init('work');
+        DOM.btnWork.title = 'Pause';
       }
+
+      if (e.classList.contains('btn-break')) {
+        App.init('break');
+        DOM.btnBreak.title = 'Pause';
+      }
+
+      return;
+    }
+
+    if (e.classList.contains('pause')) {
+      e.classList.remove('pause');
+      e.classList.add('play');
+      e.innerHTML = `<i class="fas fa-play"></i>`;
+
+      if (e.classList.contains('btn-work')) {
+        App.pause('work');
+        DOM.btnWork.title = 'Play';
+      }
+
+      if (e.classList.contains('btn-break')) {
+        App.pause('break');
+        DOM.btnBreak.title = 'Play';
+      }
+
+      return;
     }
   },
 
@@ -128,7 +173,7 @@ const DOM = {
     audio.play();
   },
 
-  default() {
+  initialPomodoro() {
     let { workTime, breakTime } = Utils.getValues();
 
     App.pomodoroTimeWork.value = `${Utils.zeroFill(workTime)}:00`;
@@ -141,91 +186,42 @@ const DOM = {
   },
 };
 
-const Pomodoro = {
-  minutes: ({ workTime, breakTime } = Utils.getValues()),
-  secondsWork: Utils.zeroFill(0),
-  secondsBreak: Utils.zeroFill(0),
-  startWork: 0,
-  startBreak: 0,
-
-  startPomodoroWork() {
-    Pomodoro.startWork = setInterval(function () {
-      if (Number(Pomodoro.secondsWork) === 0) {
-        Pomodoro.secondsWork = 60;
-        Pomodoro.minutes.workTime -= 1;
-      }
-
-      Pomodoro.secondsWork -= 1;
-      Pomodoro.minutes.workTime = Utils.zeroFill(Pomodoro.minutes.workTime);
-      Pomodoro.secondsWork = Utils.zeroFill(Pomodoro.secondsWork);
-      App.pomodoroTimeWork.value = `${Pomodoro.minutes.workTime}:${Pomodoro.secondsWork}`;
-
-      if (Number(Pomodoro.secondsWork) === 0 && Number(Pomodoro.minutes.workTime) === 0) {
-        App.pause();
-        DOM.sounds();
-        DOM.playPauseIcon(DOM.btnWork);
-        DOM.doneSessions('work');
-        DOM.pomodoroHide('work');
-        App.reset('work');
-      }
-    }, 1000);
-  },
-
-  startPomodoroBreak() {
-    Pomodoro.startBreak = setInterval(function () {
-      if (Number(Pomodoro.secondsBreak) === 0) {
-        Pomodoro.secondsBreak = 60;
-        Pomodoro.minutes.breakTime -= 1;
-      }
-
-      Pomodoro.secondsBreak -= 1;
-      Pomodoro.minutes.breakTime = Utils.zeroFill(Pomodoro.minutes.breakTime);
-      Pomodoro.secondsBreak = Utils.zeroFill(Pomodoro.secondsBreak);
-      App.pomodoroTimeBreak.value = `${Pomodoro.minutes.breakTime}:${Pomodoro.secondsBreak}`;
-
-      if (Number(Pomodoro.secondsBreak) === 0 && Number(Pomodoro.minutes.breakTime) === 0) {
-        App.pause();
-        DOM.sounds();
-        DOM.playPauseIcon(DOM.btnBreak);
-        DOM.doneSessions('break');
-        DOM.pomodoroHide('break');
-        App.reset('break');
-      }
-    }, 1000);
-  },
-};
-
 const App = {
   pomodoroTimeWork: document.getElementById('pomodoro_time_work'),
   pomodoroTimeBreak: document.getElementById('pomodoro_time_break'),
 
   init(pomodoro) {
-    App.pause();
-
-    if (pomodoro === 'work') return Pomodoro.startPomodoroWork();
-    if (pomodoro === 'break') return Pomodoro.startPomodoroBreak();
+    if (pomodoro === 'work') return Pomodoro1.startWork();
+    if (pomodoro === 'break') return Pomodoro1.startBreak();
   },
 
   pause(pomodoro) {
-    if (pomodoro === 'work') return clearInterval(Pomodoro.startWork);
-    if (pomodoro === 'break') return clearInterval(Pomodoro.startBreak);
+    if (pomodoro === 'work') return clearInterval(Pomodoro1.startWorkMinutes);
+    if (pomodoro === 'break') return clearInterval(Pomodoro1.startBreakMinutes);
 
-    clearInterval(Pomodoro.startWork);
-    clearInterval(Pomodoro.startBreak);
+    clearInterval(Pomodoro1.startWorkMinutes);
+    clearInterval(Pomodoro1.startBreakMinutes);
   },
 
   reset(pomodoro) {
-    if (pomodoro === 'work') {
-      Pomodoro.minutes.workTime += Utils.getValues().workTime;
-      App.pomodoroTimeWork.value = `${Utils.zeroFill(Pomodoro.minutes.workTime)}:00`;
-    }
+    let { workTime, breakTime } = Utils.getValues();
 
-    if (pomodoro === 'break') {
-      Pomodoro.minutes.breakTime += Utils.getValues().breakTime;
-      App.pomodoroTimeBreak.value = `${Utils.zeroFill(Pomodoro.minutes.breakTime)}:00`;
-    }
+    if (pomodoro === 'work') Pomodoro1.workTime += workTime;
+    if (pomodoro === 'break') Pomodoro1.breakTime += breakTime;
+
+    DOM.initialPomodoro();
+  },
+
+  show(pomodoro, minutes, seconds) {
+    minutes = Utils.zeroFill(minutes);
+    seconds = Utils.zeroFill(seconds);
+
+    if (pomodoro === 'work') this.pomodoroTimeWork.value = `${minutes}:${seconds}`;
+    if (pomodoro === 'break') this.pomodoroTimeBreak.value = `${minutes}:${seconds}`;
   },
 };
+
+const Pomodoro1 = new Pomodoro();
 DOM.createSessions();
 DOM.setClassSessions();
-DOM.default();
+DOM.initialPomodoro();
