@@ -34,8 +34,8 @@ class PomodoroSetTime {
     btnsAdd.forEach((btn, index) => {
       btn.addEventListener('click', () => {
         let { workTime, breakTime, sessions } = this.getTimes();
-        if (index === 0) return workTime < 60 ? (this.inputWorkTime.value = setTime.add(workTime)) : false;
-        if (index === 1) return breakTime < 60 ? (this.inputBreakTime.value = setTime.add(breakTime)) : false;
+        if (index === 0) return workTime < 60 ? (this.inputWorkTime.value = setTime.add(workTime)) : 0;
+        if (index === 1) return breakTime < 60 ? (this.inputBreakTime.value = setTime.add(breakTime)) : 0;
         if (index === 2) return (this.inputNumberSessions.value = setTime.add(sessions));
       });
     });
