@@ -33,18 +33,10 @@ class PomodoroSetTime {
 
     btnsAdd.forEach((btn, index) => {
       btn.addEventListener('click', () => {
-        if (index === 0) {
-          let { workTime } = this.getTimes();
-          return (this.inputWorkTime.value = setTime.add(workTime));
-        }
-        if (index === 1) {
-          let { breakTime } = this.getTimes();
-          return (this.inputBreakTime.value = setTime.add(breakTime));
-        }
-        if (index === 2) {
-          let { sessions } = this.getTimes();
-          return (this.inputNumberSessions.value = setTime.add(sessions));
-        }
+        let { workTime, breakTime, sessions } = this.getTimes();
+        if (index === 0) return (this.inputWorkTime.value = setTime.add(workTime));
+        if (index === 1) return (this.inputBreakTime.value = setTime.add(breakTime));
+        if (index === 2) return (this.inputNumberSessions.value = setTime.add(sessions));
       });
     });
   }
@@ -54,18 +46,10 @@ class PomodoroSetTime {
 
     btnsSub.forEach((btn, index) => {
       btn.addEventListener('click', () => {
-        if (index === 0) {
-          let { workTime } = this.getTimes();
-          return workTime > 25 ? (this.inputWorkTime.value = setTime.sub(workTime)) : 0;
-        }
-        if (index === 1) {
-          let { breakTime } = this.getTimes();
-          return breakTime > 5 ? (this.inputBreakTime.value = setTime.sub(breakTime)) : 0;
-        }
-        if (index === 2) {
-          let { sessions } = this.getTimes();
-          return sessions > 1 ? (this.inputNumberSessions.value = setTime.sub(sessions)) : 0;
-        }
+        let { workTime, breakTime, sessions } = this.getTimes();
+        if (index === 0) return workTime > 1 ? (this.inputWorkTime.value = setTime.sub(workTime)) : 0;
+        if (index === 1) return breakTime > 1 ? (this.inputBreakTime.value = setTime.sub(breakTime)) : 0;
+        if (index === 2) return sessions > 1 ? (this.inputNumberSessions.value = setTime.sub(sessions)) : 0;
       });
     });
   }
